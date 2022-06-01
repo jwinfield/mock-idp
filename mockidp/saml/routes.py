@@ -40,8 +40,11 @@ def begin_login_get():
     logging.info("Storing request %s", req.id)
     open_saml_requests[req.id] = req
 
+    saml_relay_state = flask.request.args['RelayState']
+
     response = flask.make_response(flask.redirect("/saml/login", code=302))
     response.set_cookie('mockidp_request_id', value=req.id)
+    response.set_cookie('mockidp_relay_state', value=saml_relay_state)
     return response
 
 
@@ -63,6 +66,11 @@ def authenticate():
         saml_request = open_saml_requests[saml_req_id]
         session = get_session(user, saml_request)
         url, saml_response = create_auth_response(conf, session)
+
+        saml_relay_state = flask.request.cookies.get('mockidp_relay_state')
+        if saml_relay_state:
+            url += '?RelayState=' + saml_relay_state
+
         return flask.render_template('auth_response.html', post_url=url, saml_response=saml_response)
     else:
         flask.flash(f"Incorrect username or password {username}")
