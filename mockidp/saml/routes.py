@@ -17,8 +17,9 @@ def init(_conf):
     conf = _conf
 
 
-@app.route('/saml', methods=['POST'])
-def begin_login():
+# @app.route('/saml', methods=['POST'])
+@app.route('/saml/<string:saml_response_template>', methods=['POST'])
+def begin_login(saml_response_template='default'):
     saml_request = flask.request.form['SAMLRequest']
     req = parse_request(saml_request)
 
@@ -27,11 +28,13 @@ def begin_login():
 
     response = flask.make_response(flask.redirect("/saml/login", code=302))
     response.set_cookie('mockidp_request_id', value=req.id)
+    response.set_cookie('mockidp_response_template', value=saml_response_template)
     return response
 
 
-@app.route('/saml', methods=['GET'])
-def begin_login_get():
+# @app.route('/saml', methods=['GET'])
+@app.route('/saml/<string:saml_response_template>', methods=['GET'])
+def begin_login_get(saml_response_template='default'):
     saml_request = flask.request.args['SAMLRequest']
     logging.info("Got saml_request %s", saml_request)
 
@@ -45,6 +48,8 @@ def begin_login_get():
     response = flask.make_response(flask.redirect("/saml/login", code=302))
     response.set_cookie('mockidp_request_id', value=req.id)
     response.set_cookie('mockidp_relay_state', value=saml_relay_state)
+    response.set_cookie('mockidp_response_template', value=saml_response_template)
+
     return response
 
 
@@ -65,7 +70,12 @@ def authenticate():
             return '404: Missing login session', 404
         saml_request = open_saml_requests[saml_req_id]
         session = get_session(user, saml_request)
-        url, saml_response = create_auth_response(conf, session)
+
+        saml_response_template = flask.request.cookies.get('mockidp_response_template')
+        if not saml_response_template:
+            saml_response_template = 'default'
+
+        url, saml_response = create_auth_response(conf, session, saml_response_template)
 
         saml_relay_state = flask.request.cookies.get('mockidp_relay_state')
         if saml_relay_state:

@@ -3,7 +3,7 @@
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
-    ID="mockidphFBg5izBk" InResponseTo="{{ session.request_id }}" IssueInstant="{{ issue_instant }}"
+    ID="okta_response" InResponseTo="{{ session.request_id }}" IssueInstant="{{ issue_instant }}"
     Version="2.0">
 
     <saml:Issuer>https://airdev-mock-saml-idp.s3.amazonaws.com/metadata/mock-saml-idp-metadata5.xml</saml:Issuer>

@@ -1,0 +1,39 @@
+service_providers:
+  - name: "SAVE XXX urn:amazon:cognito:sp:us-east-1_hFBg5izBk"
+    response_url: "https://qa.air.inc/oauth"
+
+  - name: "urn:amazon:cognito:sp:us-east-1_hFBg5izBk"
+    response_url: "https://dev-auth.air.inc/saml2/idpresponse"
+
+users:
+  jim:
+    first_name: "Jim"
+    last_name: "Test"
+    email: "jim@example.org"
+    password: test
+  testuser:
+    first_name: "Test"
+    last_name: "User"
+    email: "testuser@example.org"
+    password: test
+  charlie:
+    first_name: "Charlie"
+    last_name: "Brown"
+    email: "charlie@gmail.com"
+    password: snoopy
+  linus:
+    first_name: "Linus"
+    last_name: "van Pelt"
+    email: "linus@gmail.com"
+    password: pumpkin
+  lucy:
+    password: charlie
+    first_name: "Lucy"
+    last_name: "van Pelt"
+    email: "lucy@gmail.com"
+  peppermint:
+    first_name: "Peppermint"
+    last_name: "Patty"
+    email: "peppermint@gmail.com"
+    password: peppermint
+
